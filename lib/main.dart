@@ -34,13 +34,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  //// int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  //// void _incrementCounter() {
+  ////   setState(() {
+  ////     _counter++;
+  ////   });
+  //// }
 
   @override
   Widget build(BuildContext context) {
@@ -48,64 +48,63 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: BlocListener<CounterCubit, CounterState>(
-        listener: (context, state) {
-          if (state.wasIncremented == true) {
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Incremented!'),
-                duration: Duration(milliseconds: 300),
-              ),
-            );
-          } else if (state.wasIncremented == false) {
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Decremented!'),
-                duration: Duration(milliseconds: 300),
-              ),
-            );
-          }
-        },
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'You have pushed the button this many times:',
-              ),
-              BlocBuilder<CounterCubit, CounterState>(
-                //* BlocBuilder -> Rebuilds the UI FOR EVERY NEW STATE coming from the bloc
-                builder: (context, state) {
-                  return Text(
-                    state.counterValue.toString(),
-                    style: Theme.of(context).textTheme.headline4,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'You have pushed the button this many times:',
+            ),
+            BlocConsumer<CounterCubit, CounterState>(
+              //* BlocConsumer -> BlocBuilder + BlocListener
+              //* BlocBuilder -> Rebuilds the UI FOR EVERY NEW STATE coming from the bloc
+              listener: (context, state) {
+                if (state.wasIncremented == true) {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Incremented!'),
+                      duration: Duration(milliseconds: 300),
+                    ),
                   );
-                },
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  FloatingActionButton(
-                    onPressed: () {
-                      BlocProvider.of<CounterCubit>(context).decrement();
-                      //context.bloc<CounterCubit>().decrement();
-                    },
-                    tooltip: 'Decrement',
-                    child: Icon(Icons.remove),
-                  ),
-                  FloatingActionButton(
-                    onPressed: () {
-                      BlocProvider.of<CounterCubit>(context).increment();
-                      //context.bloc<CounterCubit>().increment()();
-                    },
-                    tooltip: 'Increment',
-                    child: Icon(Icons.add),
-                  )
-                ],
-              )
-            ],
-          ),
+                } else if (state.wasIncremented == false) {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Decremented!'),
+                      duration: Duration(milliseconds: 300),
+                    ),
+                  );
+                }
+              },
+              builder: (context, state) {
+                return Text(
+                  state.counterValue.toString(),
+                  style: Theme.of(context).textTheme.headline4,
+                );
+              },
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                FloatingActionButton(
+                  onPressed: () {
+                    BlocProvider.of<CounterCubit>(context).decrement();
+                    //context.bloc<CounterCubit>().decrement();
+                  },
+                  tooltip: 'Decrement',
+                  child: Icon(Icons.remove),
+                ),
+                FloatingActionButton(
+                  onPressed: () {
+                    BlocProvider.of<CounterCubit>(context).increment();
+                    //context.bloc<CounterCubit>().increment()();
+                  },
+                  tooltip: 'Increment',
+                  child: Icon(Icons.add),
+                )
+              ],
+            )
+          ],
         ),
       ),
     );
